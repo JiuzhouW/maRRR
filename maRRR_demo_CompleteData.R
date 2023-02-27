@@ -1,8 +1,7 @@
-# here we demonstrate how to use the maRRR function
-# see detailed definations for each function 
+# here we demonstrate how to use the maRRR function for prediction
+# see detailed definitions for each function 
 
 # import the required functions
-setwd("C:\\Users\\wellw\\Desktop\\Prof Lock RA")
 source("maRRR.R")
 
 # simulate complete data
