@@ -39,6 +39,95 @@ Y_combiner_nonzero = function(Yi_list,mod){
   return(Y)
 }
 
+# concatenate all matrices in a module, including zeros
+
+mod_refine = function(X,mod,n_sample){
+  ###########################################################################################################################
+  ## @parameters: 
+  ##    n_sample: numeric vector, number of samples for each cohort
+  ##    X: matrix, full concatenated outcome matrix without zeros 
+  ##    mod: numeric vector, current module information, e.g. c(1,0,1)
+  ## ESTIMATION:
+  ##    No estimation in the data generation function.
+  ## @returns:
+  ##    temp: matrix, concatenated outcome matrix for current module with zeros
+  ###########################################################################################################################  
+  
+  temp = NULL
+  p_x = dim(X)[1]
+  index_upper = 0
+  index_lower = 1
+  for(i in 1:length(mod)){
+    index_upper = index_upper + n_sample[i]
+    if(mod[i]==1){
+      temp = cbind(temp, X[,index_lower:index_upper])
+    }else if(mod[i]==0){
+      temp = cbind(temp, matrix(rep(0,p_x*n_sample[i]),nrow = p_x) )
+    }
+    index_lower = index_lower + n_sample[i]
+  }
+  return(temp)
+}
+
+# replace all negative numbers with zeros in a vector
+
+thres = function(vector){
+  new_vec = NULL
+  for (i in vector) {
+    new_vec = c(new_vec,max(0,i))
+  }
+  return(new_vec)
+}
+
+# calculate current loss
+# computationally slow
+
+loss_calculator = function(X_tot,n_mod_B,n_mod_S,lambdaBs,lambdaSs,B_s_list,S_s_list,Y_list){
+  X_res = X_tot 
+  for(i in 1:n_mod_B){
+    X_res = X_res - B_s_list[[i]]%*%Y_list[[i]] 
+  }
+  for(i in 1:n_mod_S){
+    X_res = X_res - S_s_list[[i]]
+  }
+  
+  loss = 0.5*sum(X_res^2) 
+  for(i in 1:n_mod_B){
+    loss = loss + lambdaBs[i]*sum(abs(svd(B_s_list[[i]])$d)) 
+  }
+  for(i in 1:n_mod_S){
+    loss = loss + lambdaSs[i]*sum(abs(svd(S_s_list[[i]])$d))
+  }
+  return(loss)
+}
+
+
+# Generate best penalties for auxiliary structures S 
+# based on the random matrix theory mentioned in the manuscripts
+
+lambda_S_gen = function(p_x,modules_index_S,n_sample){
+  all_lambda = c()
+  for (i in modules_index_S) {
+    temp = sqrt(sum(n_sample[i])) + sqrt(p_x)
+    all_lambda = c(all_lambda,temp)
+  }
+  return(all_lambda)
+}
+
+# Generate best penalties for covariate effects B 
+# based on the random matrix theory mentioned in the manuscripts
+
+lambda_B_gen = function(B_list){
+  all_lambda = c()
+  for (i in B_list) {
+    matrix_size = dim(i)
+    temp = sqrt(matrix_size[1]) + sqrt(matrix_size[2])
+    all_lambda = c(all_lambda,temp)
+  }
+  return(all_lambda)
+}
+
+####################### main functions #######################
 
 # generate ground truth B,Y,S for simulation use
 data_gen = function(seed = 1,
@@ -223,30 +312,6 @@ data_gen = function(seed = 1,
   return(list(X_tot,Y_org_list,B_list,S_list))
 }
 
-# Generate best penalties for auxiliary structures S 
-# based on the random matrix theory mentioned in the manuscripts
-
-lambda_S_gen = function(p_x,modules_index_S,n_sample){
-  all_lambda = c()
-  for (i in modules_index_S) {
-    temp = sqrt(sum(n_sample[i])) + sqrt(p_x)
-    all_lambda = c(all_lambda,temp)
-  }
-  return(all_lambda)
-}
-
-# Generate best penalties for covariate effects B 
-# based on the random matrix theory mentioned in the manuscripts
-
-lambda_B_gen = function(B_list){
-  all_lambda = c()
-  for (i in B_list) {
-    matrix_size = dim(i)
-    temp = sqrt(matrix_size[1]) + sqrt(matrix_size[2])
-    all_lambda = c(all_lambda,temp)
-  }
-  return(all_lambda)
-}
 
 # initialize starting values for estimation
 # # of B_s = # of modules, can be initialized to be the same
@@ -309,7 +374,6 @@ ini_gen = function(seed = 1,
   }
   
   
-  
   if(Sinvolved){
     for(i in 1:n_mod_S){
       #U_s is universal for one module
@@ -330,67 +394,7 @@ ini_gen = function(seed = 1,
   
 }
 
-# concatenate all matrices in a module, including zeros
 
-mod_refine = function(X,mod,n_sample){
-  ###########################################################################################################################
-  ## @parameters: 
-  ##    n_sample: numeric vector, number of samples for each cohort
-  ##    X: matrix, full concatenated outcome matrix without zeros 
-  ##    mod: numeric vector, current module information, e.g. c(1,0,1)
-  ## ESTIMATION:
-  ##    No estimation in the data generation function.
-  ## @returns:
-  ##    temp: matrix, concatenated outcome matrix for current module with zeros
-  ###########################################################################################################################  
-  
-  temp = NULL
-  p_x = dim(X)[1]
-  index_upper = 0
-  index_lower = 1
-  for(i in 1:length(mod)){
-    index_upper = index_upper + n_sample[i]
-    if(mod[i]==1){
-      temp = cbind(temp, X[,index_lower:index_upper])
-    }else if(mod[i]==0){
-      temp = cbind(temp, matrix(rep(0,p_x*n_sample[i]),nrow = p_x) )
-    }
-    index_lower = index_lower + n_sample[i]
-  }
-  return(temp)
-}
-
-# replace all negative numbers with zeros in a vector
-
-thres = function(vector){
-  new_vec = NULL
-  for (i in vector) {
-    new_vec = c(new_vec,max(0,i))
-  }
-  return(new_vec)
-}
-
-# calculate current loss
-# computationally slow
-
-loss_calculator = function(X_tot,n_mod_B,n_mod_S,lambdaBs,lambdaSs,B_s_list,S_s_list,Y_list){
-  X_res = X_tot 
-  for(i in 1:n_mod_B){
-    X_res = X_res - B_s_list[[i]]%*%Y_list[[i]] 
-  }
-  for(i in 1:n_mod_S){
-    X_res = X_res - S_s_list[[i]]
-  }
-  
-  loss = 0.5*sum(X_res^2) 
-  for(i in 1:n_mod_B){
-    loss = loss + lambdaBs[i]*sum(abs(svd(B_s_list[[i]])$d)) 
-  }
-  for(i in 1:n_mod_S){
-    loss = loss + lambdaSs[i]*sum(abs(svd(S_s_list[[i]])$d))
-  }
-  return(loss)
-}
 
 # optimization based on algorithm 1
 
@@ -739,6 +743,52 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
                                  modules_S=modules_B,modules_index_S,
                                  n_sample,lambdaBs,lambdaSs,bound,max_iter,
                                  Binvolved,Sinvolved,orth_sol,loss_comp,col_index){
+    ###########################################################################################################################
+  ## @parameters: 
+  ##    col_index: list of numeric vectors, i th vector represents 
+  ##               the index for i th cohort in terms of Xtot
+  ##    X_tot_incom: matrix (#features x #samples), the concatenated version of 
+  ##             outcome matrices with NAs, e.g. [X1,X2,X3] if there are three cohorts in total
+  ##    Y_org_list: list of matrices, covariate matrices for each cohort
+  ##    n_sample: numeric vector, number of samples for each cohort
+  ##    orth_sol: logical, whether to orthogonalize covariate matrices before optimization
+  ##              must set as "TRUE"
+  ##    loss_comp: logical, whether to compute loss for each epoch
+  ##    lambdaBs: numeric vector, penalties for each B module
+  ##    lambdaSS: numeric vector, penalties for each S module
+  ##    bound: numeric, convergence criteria for squared norm difference of B/S
+  ##    max_iter: numeric, max number of epochs for optimization
+  ##    Binvolved: logical, whether to generate covaraite effects, i.e. B and Y
+  ##    Sinvolved: logical, whether to generate auxiliary variation structures, i.e. S
+  ##    modules_B: list of numeric vectors, indicating which cohort has a covariate effect in each module,
+  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
+  ##               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+  ##                    c(0,1) means that it is an individual covariate effect of Y2
+  ##    n_mod_B: numeric, number of covariate-related modules included 
+  ##    modules_S: list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
+  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
+  ##               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
+  ##                    c(0,1) means that it is an individual auxiliary structure S2
+  ##    modules_index_S: list of numeric vectors, indicating the index of Si included
+  ##               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
+  ##               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"
+  ##    n_mod_S: numeric, number of covariate-unrelated modules included 
+  ## ESTIMATION:
+  ##    UB_s_list: list of matrices, loadings for covariate effects of all modules
+  ##    VB_s_list: list of matrices, scores for covariate effects of all modules
+  ##    B_s_list: list of matrices, covariate effects of all modules
+  ##    U_s_list: list of matrices, loadings for auxiliary structures of all modules
+  ##    V_s_list: list of matrices, scores for auxiliary structures of all modules
+  ##    S_s_list: list of matrices, auxiliary structures of all modules
+  ## @returns:
+  ##    X_tot: matrix, completed version of X_tot_incom
+  ##    diff_list: numeric vector, sum of squared difference between the current 
+  ##              and previous imputation
+  ##    time: numeric, total optimization time
+  ##    B_s_list: list of matrices, estimated covariate effects of all modules
+  ##    S_s_list: list of matrices, estimated auxiliary structures of all modules
+  ##    loss_list: numeric vector, loss for each epoch
+  ###########################################################################################################################  
   
   
   # get the matrix index of missing positions
@@ -898,11 +948,56 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
   return(list(X_tot,diff_list,time,B_s_list,S_s_list,loss_list))
 }
 
+# missing imputation based on algorithm 1
 
 ALS_UV_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_list,
                                  VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
                                  modules_S=modules_B,n_sample,lambdaBs,lambdaSs,bound,max_iter,
                                  Binvolved,Sinvolved,orth_sol,loss_comp){
+    ###########################################################################################################################
+  ## @parameters: 
+  ##    X_tot_incom: matrix (#features x #samples), the concatenated version of 
+  ##             outcome matrices with NAs, e.g. [X1,X2,X3] if there are three cohorts in total
+  ##    Y_org_list: list of matrices, covariate matrices for each cohort
+  ##    n_sample: numeric vector, number of samples for each cohort
+  ##    orth_sol: logical, whether to orthogonalize covariate matrices before optimization
+  ##              must set as "TRUE"
+  ##    loss_comp: logical, whether to compute loss for each epoch
+  ##    lambdaBs: numeric vector, penalties for each B module
+  ##    lambdaSS: numeric vector, penalties for each S module
+  ##    bound: numeric, convergence criteria for squared norm difference of B/S
+  ##    max_iter: numeric, max number of epochs for optimization
+  ##    Binvolved: logical, whether to generate covaraite effects, i.e. B and Y
+  ##    Sinvolved: logical, whether to generate auxiliary variation structures, i.e. S
+  ##    modules_B: list of numeric vectors, indicating which cohort has a covariate effect in each module,
+  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
+  ##               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+  ##                    c(0,1) means that it is an individual covariate effect of Y2
+  ##    n_mod_B: numeric, number of covariate-related modules included 
+  ##    modules_S: list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
+  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
+  ##               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
+  ##                    c(0,1) means that it is an individual auxiliary structure S2
+  ##    modules_index_S: list of numeric vectors, indicating the index of Si included
+  ##               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
+  ##               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"
+  ##    n_mod_S: numeric, number of covariate-unrelated modules included 
+  ## ESTIMATION:
+  ##    UB_s_list: list of matrices, loadings for covariate effects of all modules
+  ##    VB_s_list: list of matrices, scores for covariate effects of all modules
+  ##    B_s_list: list of matrices, covariate effects of all modules
+  ##    U_s_list: list of matrices, loadings for auxiliary structures of all modules
+  ##    V_s_list: list of matrices, scores for auxiliary structures of all modules
+  ##    S_s_list: list of matrices, auxiliary structures of all modules
+  ## @returns:
+  ##    X_tot: matrix, completed version of X_tot_incom
+  ##    diff_list: numeric vector, sum of squared difference between the current 
+  ##              and previous imputation
+  ##    time: numeric, total optimization time
+  ##    B_s_list: list of matrices, estimated covariate effects of all modules
+  ##    S_s_list: list of matrices, estimated auxiliary structures of all modules
+  ##    loss_list: numeric vector, loss for each epoch
+  ###########################################################################################################################  
   
   # get the matrix index of missing positions
   missing_pos = is.na(X_tot_incom)
