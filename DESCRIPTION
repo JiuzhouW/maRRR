@@ -1,0 +1,12 @@
+Package: maRRR
+Title: Perform Multiple Augmented Reduced Rank Regression
+Version: 0.0.0.9000
+Authors@R: 
+    person("Jiuzhou", "Wang", , "wang9062@umn.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Functions to predict multi-cohort data from another multi-cohort data with covariate-unrelated auxiliary structures. Both outcomes and predictors have the same number of samples but different features.Ideally, the number of features is smaller than that of samples. 
+License: `use_gpl3_license()` 
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
