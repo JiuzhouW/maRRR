@@ -1,5 +1,6 @@
-# maRRR
-This folder contains R package for the **multiple augmented reduced rank regression**(maRRR) method presented in the [manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf) and a simple demostration of usage of the package. This R package aims to predict one multi-cohort multi-variate data from another multi-cohort data. It is capable of doing missing data imputation as well. For an up-to-date and user-friendly R functions for the methods described see [here](https://github.com/JiuzhouW/maRRR/).  
+# Multiple Augmented Reduced Rank Regression (maRRR)
+
+This folder contains R package for the **multiple augmented reduced rank regression** (maRRR) method presented in the [manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf) and a simple demostration of usage of the package. This R package aims to predict one multi-cohort multi-variate data from another multi-cohort data. It is capable of doing missing data imputation as well. For an up-to-date and user-friendly R functions for the methods described see [here](https://github.com/JiuzhouW/maRRR/).  
 
 One can use the method by loading R scripts `maRRR.R` in this [folder](https://github.com/JiuzhouW/maRRR/tree/main/Previous%20R%20functions). The folder contains two demos for complete data estimation and missing data imputation.
 
