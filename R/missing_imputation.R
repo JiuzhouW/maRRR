@@ -5,7 +5,7 @@
 #' Optimization based on algorithm 2 from maRRR paper.
 #' @author Jiuzhou Wang 
 #' @param X_tot_incom A matrix (#features x #samples), the concatenated version of 
-#'             outcome matrices with NAs, e.g. [X1,X2,X3] if there are three cohorts in total.
+#'             outcome matrices with NAs, e.g. (X1,X2,X3) if there are three cohorts in total.
 #' @param Y_org_list A list of matrices, covariate matrices for each cohort.
 #' @param n_sample A numeric vector, number of samples for each cohort.
 #' @param col_index A list of numeric vectors, i th vector represents 
@@ -26,7 +26,7 @@
 #' @param n_mod_B A numeric, number of covariate-related modules included.
 #' @param modules_S A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
 #'               i th "1" in the j th vector means the i th cohort is included in the j th module.
-#'               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
+#'               e.g. c(1,1) means that it is a joint auxiliary structure (S1,S2);
 #'                    c(0,1) means that it is an individual auxiliary structure S2.
 #' @param modules_index_S list of numeric vectors, indicating the index of Si included
 #'               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
@@ -40,15 +40,14 @@
 #' @param S_s_list A list of matrices, auxiliary structures of all modules. Initial values for optimization.
 #' @returns:
 #' A list contains the following:
-#' \item {X_tot}{A matrix, completed version of X_tot_incom.}
-#' \item {diff_list}{A numeric vector, sum of squared difference between the current 
+#' \item{X_tot}{A matrix, completed version of X_tot_incom.}
+#' \item{diff_list}{A numeric vector, sum of squared difference between the current 
 #'              and previous imputation.}
-#' \item {time}{A numeric, total optimization time.} 
-#' \item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
-#' \item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
-#' \item {loss_list}{A numeric vector, loss for each epoch.}
-#' @examples
-#' ALS_BS_missing_impute(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
+#' \item{time}{A numeric, total optimization time.} 
+#' \item{B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+#' \item{S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+#' \item{loss_list}{A numeric vector, loss for each epoch.}
+#' @examples ALS_BS_missing_impute(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
 #' VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
 #' modules_S=modules_B,n_sample,lambdaBs,lambdaSs,bound,max_iter,
 #' Binvolved,Sinvolved,orth_sol,loss_comp,col_index)
@@ -224,7 +223,7 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
 #' Optimization based on algorithm 1 from maRRR paper.
 #' @author Jiuzhou Wang 
 #' @param X_tot_incom A matrix (#features x #samples), the concatenated version of 
-#'             outcome matrices with NAs, e.g. [X1,X2,X3] if there are three cohorts in total.
+#'             outcome matrices with NAs, e.g. (X1,X2,X3) if there are three cohorts in total.
 #' @param Y_org_list A list of matrices, covariate matrices for each cohort.
 #' @param n_sample A numeric vector, number of samples for each cohort.
 #' @param orth_sol A logical, whether to orthogonalize covariate matrices before optimization
@@ -243,7 +242,7 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
 #' @param n_mod_B A numeric, number of covariate-related modules included.
 #' @param modules_S A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
 #'               i th "1" in the j th vector means the i th cohort is included in the j th module.
-#'               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
+#'               e.g. c(1,1) means that it is a joint auxiliary structure (S1,S2);
 #'                    c(0,1) means that it is an individual auxiliary structure S2.
 #' @param n_mod_S A numeric, number of covariate-unrelated modules included. Initial values for optimization.
 #' @param UB_s_list A list of matrices, loadings for covariate effects of all modules. Initial values for optimization.
@@ -254,13 +253,13 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
 #' @param S_s_list A list of matrices, auxiliary structures of all modules. Initial values for optimization.
 #' @returns:
 #' A list contains the following:
-#' \item {X_tot}{A matrix, completed version of X_tot_incom.}
-#' \item {diff_list}{A numeric vector, sum of squared difference between the current 
+#' \item{X_tot}{A matrix, completed version of X_tot_incom.}
+#' \item{diff_list}{A numeric vector, sum of squared difference between the current 
 #'              and previous imputation.}
-#' \item {time}{A numeric, total optimization time.} 
-#' \item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
-#' \item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
-#' \item {loss_list}{A numeric vector, loss for each epoch.}
+#' \item{time}{A numeric, total optimization time.} 
+#' \item{B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+#' \item{S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+#' \item{loss_list}{A numeric vector, loss for each epoch.}
 #' @examples
 #' ALS_UV_missing_impute(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
 #' VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
