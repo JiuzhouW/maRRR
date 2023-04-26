@@ -32,7 +32,7 @@ ALS_BS_missing_impute(
 }
 \arguments{
 \item{X_tot_incom}{A matrix (#features x #samples), the concatenated version of
-outcome matrices with NAs, e.g. \link{X1,X2,X3} if there are three cohorts in total.}
+outcome matrices with NAs, e.g. (X1,X2,X3) if there are three cohorts in total.}
 
 \item{Y_org_list}{A list of matrices, covariate matrices for each cohort.}
 
@@ -59,7 +59,7 @@ c(0,1) means that it is an individual covariate effect of Y2.}
 
 \item{modules_S}{A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
 i th "1" in the j th vector means the i th cohort is included in the j th module.
-e.g. c(1,1) means that it is a joint auxiliary structure \link{S1,S2};
+e.g. c(1,1) means that it is a joint auxiliary structure (S1,S2);
 c(0,1) means that it is an individual auxiliary structure S2.}
 
 \item{modules_index_S}{list of numeric vectors, indicating the index of Si included
@@ -91,13 +91,13 @@ the index for i th cohort in terms of Xtot.}
 \value{
 :
 A list contains the following:
-\item {X_tot}{A matrix, completed version of X_tot_incom.}
-\item {diff_list}{A numeric vector, sum of squared difference between the current
+\item{X_tot}{A matrix, completed version of X_tot_incom.}
+\item{diff_list}{A numeric vector, sum of squared difference between the current
 and previous imputation.}
-\item {time}{A numeric, total optimization time.}
-\item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
-\item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
-\item {loss_list}{A numeric vector, loss for each epoch.}
+\item{time}{A numeric, total optimization time.}
+\item{B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+\item{S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+\item{loss_list}{A numeric vector, loss for each epoch.}
 }
 \description{
 Impute the missing values of multi-cohort data with the aid of another multi-cohort data based on

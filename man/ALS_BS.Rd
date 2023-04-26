@@ -32,7 +32,7 @@ ALS_BS(
 }
 \arguments{
 \item{X_tot}{A matrix (#features x #samples), the concatenated version of outcome matrices.
-e.g. \link{X1,X2,X3} if there are three cohorts in total.}
+e.g. (X1,X2,X3) if there are three cohorts in total.}
 
 \item{Y_org_list}{A list of matrices, covariate matrices for each cohort.}
 
@@ -59,7 +59,7 @@ c(0,1) means that it is an individual covariate effect of Y2.}
 
 \item{modules_S}{A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
 i th "1" in the j th vector means the i th cohort is included in the j th module.
-e.g. c(1,1) means that it is a joint auxiliary structure \link{S1,S2};
+e.g. c(1,1) means that it is a joint auxiliary structure (S1,S2);
 c(0,1) means that it is an individual auxiliary structure S2.}
 
 \item{modules_index_S}{list of numeric vectors, indicating the index of Si included
@@ -91,20 +91,21 @@ the index for i th cohort in terms of Xtot.}
 \value{
 :
 A list contains the following:
-\item {time} {A numeric, total optimization time.}
-\item {B_s_list} {A list of matrices, estimated covariate effects of all modules.}
-\item {S_s_list} {A list of matrices, estimated auxiliary structures of all modules.}
-\item {loss_list} {A numeric vector, loss for each epoch.}
-\examples
-ALS_BS(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
-VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
-modules_S=modules_B,n_sample,lambdaBs,lambdaSs,bound,max_iter,
-Binvolved,Sinvolved,orth_sol,loss_comp,col_index)
+\item{time}{A numeric, total optimization time.}
+\item{B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+\item{S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+\item{loss_list}{A numeric vector, loss for each epoch.}
 }
 \description{
 Predict multi-cohort data from another multi-cohort data based on
 alternating least square and soft-thresholding. It requires semi-orthogonality of predictors.
 Optimization based on algorithm 2 from maRRR paper.
+}
+\examples{
+ALS_BS(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
+VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
+modules_S=modules_B,n_sample,lambdaBs,lambdaSs,bound,max_iter,
+Binvolved,Sinvolved,orth_sol,loss_comp,col_index)
 }
 \author{
 Jiuzhou Wang

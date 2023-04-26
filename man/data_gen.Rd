@@ -61,7 +61,7 @@ e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_B"}
 
 \item{modules_S}{A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
 i th "1" in the j th vector means the i th cohort is included in the j th module
-e.g. c(1,1) means that it is a joint auxiliary structure \link{S1,S2};
+e.g. c(1,1) means that it is a joint auxiliary structure (S1,S2);
 c(0,1) means that it is an individual auxiliary structure S2}
 
 \item{modules_index_S}{A list of numeric vectors, indicating the index of Si included
@@ -76,7 +76,7 @@ e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"}
 :
 A list of a outcome matrix, covariate matices, covariate effects and auxiliary effects
 \item{X_tot}{A matrix (#features x #samples), the concatenated version of outcome matrices
-e.g. \link{X1,X2,X3} if there are three cohorts in total}
+e.g. (X1,X2,X3) if there are three cohorts in total}
 \item{Y_org_list}{A list of matrices, covariate matrices for each cohort}
 \item{B_list}{A list of matrices, covariate effects of all modules}
 \item{S_list}{A list of matrices, auxiliary structures of all modules}
