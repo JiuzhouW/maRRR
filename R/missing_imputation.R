@@ -28,6 +28,9 @@
 #'               i th "1" in the j th vector means the i th cohort is included in the j th module.
 #'               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
 #'                    c(0,1) means that it is an individual auxiliary structure S2.
+#' @param modules_index_S list of numeric vectors, indicating the index of Si included
+#'               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
+#'               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"
 #' @param n_mod_S A numeric, number of covariate-unrelated modules included. Initial values for optimization.
 #' @param UB_s_list A list of matrices, loadings for covariate effects of all modules. Initial values for optimization.
 #' @param VB_s_list A list of matrices, scores for covariate effects of all modules. Initial values for optimization.
@@ -37,13 +40,13 @@
 #' @param S_s_list A list of matrices, auxiliary structures of all modules. Initial values for optimization.
 #' @returns:
 #' A list contains the following:
-#' @item {X_tot}{A matrix, completed version of X_tot_incom.}
-#' @item {diff_list}{A numeric vector, sum of squared difference between the current 
+#' \item {X_tot}{A matrix, completed version of X_tot_incom.}
+#' \item {diff_list}{A numeric vector, sum of squared difference between the current 
 #'              and previous imputation.}
-#' @item {time}{A numeric, total optimization time.} 
-#' @item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
-#' @item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
-#' @item {loss_list}{A numeric vector, loss for each epoch.}
+#' \item {time}{A numeric, total optimization time.} 
+#' \item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+#' \item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+#' \item {loss_list}{A numeric vector, loss for each epoch.}
 #' @examples
 #' ALS_BS_missing_impute(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
 #' VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,
@@ -251,13 +254,13 @@ ALS_BS_missing_impute = function(X_tot_incom,Y_org_list,n_mod_B,B_s_list,UB_s_li
 #' @param S_s_list A list of matrices, auxiliary structures of all modules. Initial values for optimization.
 #' @returns:
 #' A list contains the following:
-#' @item {X_tot}{A matrix, completed version of X_tot_incom.}
-#' @item {diff_list}{A numeric vector, sum of squared difference between the current 
+#' \item {X_tot}{A matrix, completed version of X_tot_incom.}
+#' \item {diff_list}{A numeric vector, sum of squared difference between the current 
 #'              and previous imputation.}
-#' @item {time}{A numeric, total optimization time.} 
-#' @item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
-#' @item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
-#' @item {loss_list}{A numeric vector, loss for each epoch.}
+#' \item {time}{A numeric, total optimization time.} 
+#' \item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+#' \item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+#' \item {loss_list}{A numeric vector, loss for each epoch.}
 #' @examples
 #' ALS_UV_missing_impute(X_tot,Y_org_list,n_mod_B,B_s_list,UB_s_list,
 #' VB_s_list,modules_B,n_mod_S=n_mod_B,S_s_list,U_s_list,V_s_list,

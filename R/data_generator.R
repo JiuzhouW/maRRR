@@ -1,4 +1,41 @@
-# generate ground truth B,Y,S for simulation use
+#' @title Generate ground truth B,S,X,Y for simulation use
+#' @param seed A numeric, random seed 
+#' @param n_sample A numeric vector, number of samples for each cohort
+#' @param p_x A numeric, number of features in the observed data matrices
+#' @param p_y A numeric, number of accompanying covariates 
+#' @param R_b_true A numeric, true rank for simulated B matrices
+#' @param R_s_true A numeric, true rank for simulated S matrices
+#' @param correlation A numeric, Pearson's correlation aiming to achieve in the simulated Y matrices
+#' @param orth_gen A logical, whether to orthogonalize the simulated Y matrices
+#' @param Binvolved A logical, whether to generate covaraite effects, i.e. B and Y
+#' @param Sinvolved A logical, whether to generate auxiliary variation structures, i.e. S
+#' @param modules_B A list of numeric vectors, indicating which cohort has a covariate effect in each module,
+#'               i th "1" in the j th vector means the i th cohort is included in the j th module
+#'               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+#'                    c(0,1) means that it is an individual covariate effect of Y2
+#' @param modules_index_B A list of numeric vectors, indicating the index of Yi included
+#'               e.g. c(1,2) will corresponds to c(1,1) in "modules_B";
+#'               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_B"
+#' @param sd_B A numeric vector, standard deviation of covariate coefficient matrices (B)
+#' @param n_mod_B A numeric, number of covariate-related modules included 
+#' @param modules_S A list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
+#'               i th "1" in the j th vector means the i th cohort is included in the j th module
+#'               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
+#'                    c(0,1) means that it is an individual auxiliary structure S2
+#' @param modules_index_S A list of numeric vectors, indicating the index of Si included
+#'               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
+#'               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"
+#' @param sd_S A numeric vector, standard deviation of auxiliary structure matrices (S)
+#' @param n_mod_S A numeric, number of covariate-unrelated modules included 
+#' @returns:
+#' A list of a outcome matrix, covariate matices, covariate effects and auxiliary effects
+#' \item  {X_tot} {A matrix (#features x #samples), the concatenated version of outcome matrices
+#'      e.g. [X1,X2,X3] if there are three cohorts in total}
+#' \item {Y_org_list} {A list of matrices, covariate matrices for each cohort}
+#' \item {B_list} {A list of matrices, covariate effects of all modules}
+#' \item {S_list} {A list of matrices, auxiliary structures of all modules}
+
+
 data_gen = function(seed = 1,
                     n_sample = c(100,100),
                     p_x = 100,
@@ -18,46 +55,6 @@ data_gen = function(seed = 1,
                     sd_S = sd_B,
                     n_mod_S = length(modules_S)){
   
-  
-  ###########################################################################################################################
-  ## @parameters: 
-  ##    seed: numeric, random seed 
-  ##    n_sample: numeric vector, number of samples for each cohort
-  ##    p_x: numeric, number of features in the observed data matrices
-  ##    p_y: numeric, number of accompanying covariates 
-  ##    R_b_true: numeric, true rank for simulated B matrices
-  ##    R_s_true: numeric, true rank for simulated S matrices
-  ##    correlation: numeric, Pearson's correlation aiming to achieve in the simulated Y matrices
-  ##    orth_gen: logical, whether to orthogonalize the simulated Y matrices
-  ##    Binvolved: logical, whether to generate covaraite effects, i.e. B and Y
-  ##    Sinvolved: logical, whether to generate auxiliary variation structures, i.e. S
-  ##    modules_B: list of numeric vectors, indicating which cohort has a covariate effect in each module,
-  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
-  ##               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
-  ##                    c(0,1) means that it is an individual covariate effect of Y2
-  ##    modules_index_B: list of numeric vectors, indicating the index of Yi included
-  ##               e.g. c(1,2) will corresponds to c(1,1) in "modules_B";
-  ##               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_B"
-  ##    sd_B: numeric vector, standard deviation of covariate coefficient matrices (B)
-  ##    n_mod_B: numeric, number of covariate-related modules included 
-  ##    modules_S: list of numeric vectors, indicating which cohort has an auxiliary effect in each module,
-  ##               i th "1" in the j th vector means the i th cohort is included in the j th module
-  ##               e.g. c(1,1) means that it is a joint auxiliary structure [S1,S2];
-  ##                    c(0,1) means that it is an individual auxiliary structure S2
-  ##    modules_index_S: list of numeric vectors, indicating the index of Si included
-  ##               e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
-  ##               e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"
-  ##    sd_S: numeric vector, standard deviation of auxiliary structure matrices (S)
-  ##    n_mod_S: numeric, number of covariate-unrelated modules included 
-  ## ESTIMATION:
-  ##    No estimation in the data generation function.
-  ## @returns:
-  ##    X_tot: matrix (#features x #samples), the concatenated version of outcome matrices
-  ##           e.g. [X1,X2,X3] if there are three cohorts in total
-  ##    Y_org_list: list of matrices, covariate matrices for each cohort
-  ##    B_list: list of matrices, covariate effects of all modules
-  ##    S_list: list of matrices, auxiliary structures of all modules
-  ###########################################################################################################################  
   
   library(MASS)
   set.seed(seed)
@@ -183,8 +180,27 @@ data_gen = function(seed = 1,
 
 
 
-# initialize starting values for estimation
-# # of B_s = # of modules, can be initialized to be the same
+#' @title Initialize starting values for optimization
+#' @param seed A numeric, random seed 
+#' @param n_sample A numeric vector, number of samples for each cohort
+#' @param p_x A numeric, number of features in the observed data matrices
+#' @param p_y A numeric, number of accompanying covariates 
+#' @param R_b A numeric, upper bound for rank of simulated B matrices
+#' @param R_s A numeric, upper bound for rank of simulated S matrices
+#' @param Binvolved A logical, whether to generate covaraite effects, i.e. B and Y
+#' @param Sinvolved A logical, whether to generate auxiliary variation structures, i.e. S
+#' @param n_mod_B A numeric, number of covariate-related modules included 
+#' @param n_mod_S A numeric, number of covariate-unrelated modules included 
+#' @returns:
+#' A list of initialized estimates.
+#' \item {UB_s_list} {A list of matrices, loadings for covariate effects of all modules}
+#' \item {VB_s_list} {A list of matrices, scores for covariate effects of all modules}
+#' \item {B_s_list} {A list of matrices, covariate effects of all modules}
+#' \item {U_s_list} {A list of matrices, loadings for auxiliary structures of all modules}
+#' \item {V_s_list} {A list of matrices, scores for auxiliary structures of all modules}
+#' \item {S_s_list} {A list of matrices, auxiliary structures of all modules}
+
+
 
 ini_gen = function(seed = 1,
                    n_sample = c(100,100),
@@ -196,29 +212,7 @@ ini_gen = function(seed = 1,
                    n_mod_S = n_mod_B,
                    Binvolved = TRUE,
                    Sinvolved = TRUE){
-  ###########################################################################################################################
-  ## @parameters: 
-  ##    seed: numeric, random seed 
-  ##    n_sample: numeric vector, number of samples for each cohort
-  ##    p_x: numeric, number of features in the observed data matrices
-  ##    p_y: numeric, number of accompanying covariates 
-  ##    R_b: numeric, upper bound for rank of simulated B matrices
-  ##    R_s: numeric, upper bound for rank of simulated S matrices
-  ##    Binvolved: logical, whether to generate covaraite effects, i.e. B and Y
-  ##    Sinvolved: logical, whether to generate auxiliary variation structures, i.e. S
-  ##    n_mod_B: numeric, number of covariate-related modules included 
-  ##    n_mod_S: numeric, number of covariate-unrelated modules included 
-  ## ESTIMATION:
-  ##    No estimation in the initialization function.
-  ## @returns:
-  ##    UB_s_list: list of matrices, loadings for covariate effects of all modules
-  ##    VB_s_list: list of matrices, scores for covariate effects of all modules
-  ##    B_s_list: list of matrices, covariate effects of all modules
-  ##    U_s_list: list of matrices, loadings for auxiliary structures of all modules
-  ##    V_s_list: list of matrices, scores for auxiliary structures of all modules
-  ##    S_s_list: list of matrices, auxiliary structures of all modules
-  ###########################################################################################################################  
-  
+
   set.seed(seed)
   
   UB_s_list = list()

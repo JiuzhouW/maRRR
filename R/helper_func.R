@@ -1,6 +1,10 @@
-####################### helper functions #######################
 
-# generate V or V-shaped zero matrix
+#' @title Generate a random matrix or a zero matrix
+#' @description A helper function. Generate V or V-shaped zero matrix.
+#' @param nc A numeric, number of columns.
+#' @param nr A numeric, number of rows.
+#' @param nonzero A numeric, only 1 or 0 to indicate whether nonzero is needed or not.
+#' @return V: A matrix.
 V_generator = function(nc=10,nr=100,nonzero=1){
   if(nonzero==1){
     V = matrix(rnorm(nc*nr),ncol = nc)
@@ -10,7 +14,16 @@ V_generator = function(nc=10,nr=100,nonzero=1){
   return(V)
 }
 
-# generate multi-cohort Y matrix for each module from each cohort
+#' @title Concatenate predictors from multiple cohorts
+#' @description Generate multi-cohort Y matrix for each module from each cohort.
+#' If a cohort is not included in the module, the corresponding entries will be zero.
+#' @param Yi_list A list of matrices, covariate matrices for each cohort
+#' @param mod A numeric vector, indicating which cohort has a covariate effect in each module,
+#'               i th "1" in the j th vector means the i th cohort is included in the j th module
+#'               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+#'                    c(0,1) means that it is an individual covariate effect of Y2
+#' @return Y: A matrix.
+
 Y_combiner = function(Yi_list,mod){
   Y = NULL
   for (i in 1:length(mod)) {
@@ -24,8 +37,16 @@ Y_combiner = function(Yi_list,mod){
   return(Y)
 }
 
+#' @title Concatenate predictors from multiple cohorts without zero-like matrix
+#' @description Generate multi-cohort Y matrix for each module from each cohort.
+#' If a cohort is not included in the module, there will be no corresponding entries.
+#' @param Yi_list A list of matrices, covariate matrices for each cohort
+#' @param mod A numeric vector, indicating which cohort has a covariate effect in each module,
+#'               i th "1" in the j th vector means the i th cohort is included in the j th module
+#'               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+#'                    c(0,1) means that it is an individual covariate effect of Y2
+#' @return Y: A matrix.
 
-# generate Y matrix without zero-like matrix
 Y_combiner_nonzero = function(Yi_list,mod){
   Y = NULL
   for (i in 1:length(mod)) {
@@ -37,20 +58,21 @@ Y_combiner_nonzero = function(Yi_list,mod){
 }
 
 
-# concatenate all matrices in a module, including zeros
+
+#' @title Concatenate all matrices in a module, including zeros to maintain the shape
+#' @description Generate multi-cohort X matrix from each cohort.
+#' If a cohort is not included in the module, the corresponding entries will be zero.
+#' @param X A matrix, full concatenated outcome matrix without zeros. 
+#' @param mod A numeric vector, indicating which cohort has a covariate effect in each module,
+#'               i th "1" in the j th vector means the i th cohort is included in the j th module
+#'               e.g. c(1,1) means that it is a joint covariate effect of both Y1 and Y2;
+#'                    c(0,1) means that it is an individual covariate effect of Y2
+#' @param n_sample A numeric vector, number of samples for each cohort.
+#' @return temp: A matrix, concatenated outcome matrix for current module with zeros.
+
 
 mod_refine = function(X,mod,n_sample){
-  ###########################################################################################################################
-  ## @parameters: 
-  ##    n_sample: numeric vector, number of samples for each cohort
-  ##    X: matrix, full concatenated outcome matrix without zeros 
-  ##    mod: numeric vector, current module information, e.g. c(1,0,1)
-  ## ESTIMATION:
-  ##    No estimation in the data generation function.
-  ## @returns:
-  ##    temp: matrix, concatenated outcome matrix for current module with zeros
-  ###########################################################################################################################  
-  
+
   temp = NULL
   p_x = dim(X)[1]
   index_upper = 0
@@ -67,7 +89,9 @@ mod_refine = function(X,mod,n_sample){
   return(temp)
 }
 
-# replace all negative numbers with zeros in a vector
+#' @title Replace all negative numbers with zeros in a vector
+#' @param vector A vector
+#' @return new_vec: A vector without negative numbers
 
 thres = function(vector){
   new_vec = NULL
@@ -77,8 +101,8 @@ thres = function(vector){
   return(new_vec)
 }
 
-# calculate current loss
-# computationally slow
+#' @title Calculate current
+#' @description It can be computationally heavy if high dimension.
 
 loss_calculator = function(X_tot,n_mod_B,n_mod_S,lambdaBs,lambdaSs,B_s_list,S_s_list,Y_list){
   X_res = X_tot 
