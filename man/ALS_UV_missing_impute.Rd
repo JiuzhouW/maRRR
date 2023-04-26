@@ -82,13 +82,13 @@ must set as "TRUE".}
 \value{
 :
 A list contains the following:
-X_tot: A matrix, completed version of X_tot_incom.
-diff_list: A numeric vector, sum of squared difference between the current
-and previous imputation.
-time: A numeric, total optimization time.
-B_s_list: A list of matrices, estimated covariate effects of all modules.
-S_s_list: A list of matrices, estimated auxiliary structures of all modules.
-loss_list: A numeric vector, loss for each epoch.
+\item {X_tot}{A matrix, completed version of X_tot_incom.}
+\item {diff_list}{A numeric vector, sum of squared difference between the current
+and previous imputation.}
+\item {time}{A numeric, total optimization time.}
+\item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+\item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+\item {loss_list}{A numeric vector, loss for each epoch.}
 }
 \description{
 Impute the missing values of multi-cohort data with the aid of another multi-cohort data based on

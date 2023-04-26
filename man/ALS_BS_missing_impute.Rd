@@ -62,6 +62,10 @@ i th "1" in the j th vector means the i th cohort is included in the j th module
 e.g. c(1,1) means that it is a joint auxiliary structure \link{S1,S2};
 c(0,1) means that it is an individual auxiliary structure S2.}
 
+\item{modules_index_S}{list of numeric vectors, indicating the index of Si included
+e.g. c(1,2) will corresponds to c(1,1) in "modules_S";
+e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"}
+
 \item{n_sample}{A numeric vector, number of samples for each cohort.}
 
 \item{lambdaBs}{A numeric vector, penalties for each B module.}
@@ -87,13 +91,13 @@ the index for i th cohort in terms of Xtot.}
 \value{
 :
 A list contains the following:
-X_tot: A matrix, completed version of X_tot_incom.
-diff_list: A numeric vector, sum of squared difference between the current
-and previous imputation.
-time: A numeric, total optimization time.
-B_s_list: A list of matrices, estimated covariate effects of all modules.
-S_s_list: A list of matrices, estimated auxiliary structures of all modules.
-loss_list: A numeric vector, loss for each epoch.
+\item {X_tot}{A matrix, completed version of X_tot_incom.}
+\item {diff_list}{A numeric vector, sum of squared difference between the current
+and previous imputation.}
+\item {time}{A numeric, total optimization time.}
+\item {B_s_list}{A list of matrices, estimated covariate effects of all modules.}
+\item {S_s_list}{A list of matrices, estimated auxiliary structures of all modules.}
+\item {loss_list}{A numeric vector, loss for each epoch.}
 }
 \description{
 Impute the missing values of multi-cohort data with the aid of another multi-cohort data based on
