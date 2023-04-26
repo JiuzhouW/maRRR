@@ -75,11 +75,11 @@ e.g. c(1,3,5) will corresponds to c(1,0,1,0,1) in "modules_S"}
 \value{
 :
 A list of a outcome matrix, covariate matices, covariate effects and auxiliary effects
-\item  {X_tot} {A matrix (#features x #samples), the concatenated version of outcome matrices
+\item{X_tot}{A matrix (#features x #samples), the concatenated version of outcome matrices
 e.g. \link{X1,X2,X3} if there are three cohorts in total}
-\item {Y_org_list} {A list of matrices, covariate matrices for each cohort}
-\item {B_list} {A list of matrices, covariate effects of all modules}
-\item {S_list} {A list of matrices, auxiliary structures of all modules}
+\item{Y_org_list}{A list of matrices, covariate matrices for each cohort}
+\item{B_list}{A list of matrices, covariate effects of all modules}
+\item{S_list}{A list of matrices, auxiliary structures of all modules}
 }
 \description{
 Generate ground truth B,S,X,Y for simulation use
