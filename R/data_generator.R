@@ -29,11 +29,11 @@
 #' @param n_mod_S A numeric, number of covariate-unrelated modules included 
 #' @returns:
 #' A list of a outcome matrix, covariate matices, covariate effects and auxiliary effects
-#' \item  {X_tot} {A matrix (#features x #samples), the concatenated version of outcome matrices
+#' \item{X_tot}{A matrix (#features x #samples), the concatenated version of outcome matrices
 #'      e.g. [X1,X2,X3] if there are three cohorts in total}
-#' \item {Y_org_list} {A list of matrices, covariate matrices for each cohort}
-#' \item {B_list} {A list of matrices, covariate effects of all modules}
-#' \item {S_list} {A list of matrices, auxiliary structures of all modules}
+#' \item{Y_org_list}{A list of matrices, covariate matrices for each cohort}
+#' \item{B_list}{A list of matrices, covariate effects of all modules}
+#' \item{S_list}{A list of matrices, auxiliary structures of all modules}
 
 
 data_gen = function(seed = 1,
@@ -193,12 +193,12 @@ data_gen = function(seed = 1,
 #' @param n_mod_S A numeric, number of covariate-unrelated modules included 
 #' @returns:
 #' A list of initialized estimates.
-#' \item {UB_s_list} {A list of matrices, loadings for covariate effects of all modules}
-#' \item {VB_s_list} {A list of matrices, scores for covariate effects of all modules}
-#' \item {B_s_list} {A list of matrices, covariate effects of all modules}
-#' \item {U_s_list} {A list of matrices, loadings for auxiliary structures of all modules}
-#' \item {V_s_list} {A list of matrices, scores for auxiliary structures of all modules}
-#' \item {S_s_list} {A list of matrices, auxiliary structures of all modules}
+#' \item{UB_s_list}{A list of matrices, loadings for covariate effects of all modules}
+#' \item{VB_s_list}{A list of matrices, scores for covariate effects of all modules}
+#' \item{B_s_list}{A list of matrices, covariate effects of all modules}
+#' \item{U_s_list}{A list of matrices, loadings for auxiliary structures of all modules}
+#' \item{V_s_list}{A list of matrices, scores for auxiliary structures of all modules}
+#' \item{S_s_list}{A list of matrices, auxiliary structures of all modules}
 
 
 
