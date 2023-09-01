@@ -1,12 +1,16 @@
 # Multiple Augmented Reduced Rank Regression (maRRR)
 
-This folder contains R package for the **multiple augmented reduced rank regression** (maRRR) method presented in the [manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf) and a simple demostration of usage of the package. This contains codes for fitting models by the two algorithms in Section 5.2, imputing missing values as in Section 6.2, generating penalties as in Section 4, and generating data as in Section 6.1.  This R package aims to predict one multi-cohort multi-variate data from another multi-cohort data. It is capable of doing missing data imputation as well. For an up-to-date and user-friendly R functions for the methods described see [here](https://github.com/JiuzhouW/maRRR/).  
+This folder contains R package and a simple demostration of usage for the **multiple augmented reduced rank regression** (maRRR) method presented in the article:
+
+Jiuzhou Wang and Eric F. Lock. [Multiple Augmented Reduced Rank Regression for Pan-Cancer Analysis](https://arxiv.org/pdf/2308.16333.pdf), _Biometrics_, to appear, 2023.
+
+This contains codes for fitting models by the two algorithms in Section 5.1, imputing missing values as in Section 6.2, generating penalties as in Section 4, and generating data as in Section 6.1.  This R package aims to predict one multi-cohort multi-variate data from another multi-cohort data. It is capable of doing missing data imputation as well. For an up-to-date and user-friendly R functions for the methods described see [here](https://github.com/JiuzhouW/maRRR/).  
 
 One can use the method by loading R scripts `maRRR.R` in this [folder](https://github.com/JiuzhouW/maRRR/tree/main/Previous%20R%20functions). The folder contains two demos for complete data estimation and missing data imputation.
 
 However, the R package is recommended :). 
 
-Besides, we provide the data and all the model estimates that support our findings in the [manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf) as [Rdata file](https://www.dropbox.com/s/ub9zu5inxlbh6x5/30grps_50mods_est_0418_version2.RData?dl=0) with detailed [notation explanations](https://www.dropbox.com/s/af743f8ocucz7p6/readme_modelFit.txt?dl=0) and heatmaps for all module estimates in an [online file](https://www.dropbox.com/s/891gvukhymr4a4b/30grps_50mods_est_0509.csv?dl=0).
+Besides, we provide the data and all the model estimates that support our findings in the [paper](https://arxiv.org/pdf/2308.16333.pdf) as [Rdata file](https://www.dropbox.com/s/ub9zu5inxlbh6x5/30grps_50mods_est_0418_version2.RData?dl=0) with detailed [notation explanations](https://www.dropbox.com/s/af743f8ocucz7p6/readme_modelFit.txt?dl=0) and heatmaps for all module estimates in an [online file](https://www.dropbox.com/s/891gvukhymr4a4b/30grps_50mods_est_0509.csv?dl=0).
 
 Now please let me walk through the method with you in 10 minutes.
 
