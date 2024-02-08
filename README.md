@@ -2,7 +2,7 @@
 
 This folder contains R package and a simple demostration of usage for the **multiple augmented reduced rank regression** (maRRR) method presented in the article:
 
-Jiuzhou Wang and Eric F. Lock. [Multiple Augmented Reduced Rank Regression for Pan-Cancer Analysis](https://arxiv.org/pdf/2308.16333.pdf), _Biometrics_, to appear, 2023.
+Jiuzhou Wang and Eric F. Lock. [Multiple Augmented Reduced Rank Regression for Pan-Cancer Analysis](https://academic.oup.com/biometrics/article/80/1/ujad002/7589564), _Biometrics_, 2023.
 
 This contains codes for fitting models by the two algorithms in Section 5.1, imputing missing values as in Section 6.2, generating penalties as in Section 4, and generating data as in Section 6.1.  This R package aims to predict one multi-cohort multi-variate data from another multi-cohort data. It is capable of doing missing data imputation as well. For an up-to-date and user-friendly R functions for the methods described see [here](https://github.com/JiuzhouW/maRRR/).  
 
@@ -25,7 +25,7 @@ install_github("JiuzhouW/maRRR")
 library(maRRR)
 ```
 
-The details of the method can be found in the [manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf).
+The details of the method can be found in the [Biomtetrics journal paper](https://academic.oup.com/biometrics/article/80/1/ujad002/7589564) or [Arxiv manuscript](https://github.com/JiuzhouW/maRRR/blob/main/maRRR_manuscripts.pdf).
 
 
 ## Example 1: estimate covariate effects (B) and auxiliary structures (S)
